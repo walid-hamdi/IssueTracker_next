@@ -27,6 +27,17 @@ const NewIssue = () => {
   const [error, setError] = useState("");
   const [isSubmitting, setSubmitting] = useState(false);
 
+  const handleOnSubmit = handleSubmit(async (data) => {
+    try {
+      setSubmitting(true);
+      const newIssue = await axios.post("/api/issues", data);
+      router.push("/issues");
+    } catch (error) {
+      setSubmitting(false);
+      setError("An excepted error accrued");
+    }
+  });
+
   return (
     <div className="max-w-xl space-y-3">
       {error && (
@@ -34,18 +45,7 @@ const NewIssue = () => {
           <Callout.Text>{error}</Callout.Text>
         </Callout.Root>
       )}
-      <form
-        onSubmit={handleSubmit(async (data) => {
-          try {
-            setSubmitting(true);
-            const newIssue = await axios.post("/api/issues", data);
-            router.push("/issues");
-          } catch (error) {
-            setSubmitting(false);
-            setError("An excepted error accrued");
-          }
-        })}
-      >
+      <form onSubmit={handleOnSubmit}>
         <TextField.Root>
           <TextField.Input placeholder="Title" {...register("title")} />
         </TextField.Root>
