@@ -10,6 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { createIssusSchema } from "@/app/validationSchema";
 import z from "zod";
 import ErrorMessage from "@/app/components/ErrorMessage";
+import Spinner from "@/app/components/Spinner";
 
 type IssueForm = z.infer<typeof createIssusSchema>;
 
@@ -24,6 +25,7 @@ const NewIssue = () => {
   });
   const router = useRouter();
   const [error, setError] = useState("");
+  const [isSubmitting, setSubmitting] = useState(false);
 
   return (
     <div className="max-w-xl space-y-3">
@@ -35,9 +37,11 @@ const NewIssue = () => {
       <form
         onSubmit={handleSubmit(async (data) => {
           try {
+            setSubmitting(true);
             const newIssue = await axios.post("/api/issues", data);
             router.push("/issues");
           } catch (error) {
+            setSubmitting(false);
             setError("An excepted error accrued");
           }
         })}
@@ -55,7 +59,9 @@ const NewIssue = () => {
         />
         <ErrorMessage>{errors.description?.message}</ErrorMessage>
 
-        <Button>Submit New Issue</Button>
+        <Button disabled={isSubmitting}>
+          Submit New Issue {isSubmitting && <Spinner />}
+        </Button>
       </form>
     </div>
   );
