@@ -3,7 +3,7 @@ import { Button, Callout, TextField } from "@radix-ui/themes";
 import SimpleMDE from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
 import { Controller, useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 import axios from "axios";
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -23,15 +23,16 @@ const NewIssue = () => {
   } = useForm<IssueForm>({
     resolver: zodResolver(createIssusSchema),
   });
-  const router = useRouter();
+
+  // const router = useRouter();
   const [error, setError] = useState("");
   const [isSubmitting, setSubmitting] = useState(false);
 
   const handleOnSubmit = handleSubmit(async (data) => {
     try {
       setSubmitting(true);
-      const newIssue = await axios.post("/api/issues", data);
-      router.push("/issues");
+      await axios.post("/api/issues", data);
+      // router.push("/issues");
     } catch (error) {
       setSubmitting(false);
       setError("An excepted error accrued");
@@ -45,7 +46,7 @@ const NewIssue = () => {
           <Callout.Text>{error}</Callout.Text>
         </Callout.Root>
       )}
-      <form onSubmit={handleOnSubmit}>
+      {/* <form onSubmit={handleOnSubmit}>
         <TextField.Root>
           <TextField.Input placeholder="Title" {...register("title")} />
         </TextField.Root>
@@ -62,7 +63,7 @@ const NewIssue = () => {
         <Button disabled={isSubmitting}>
           Submit New Issue {isSubmitting && <Spinner />}
         </Button>
-      </form>
+      </form> */}
     </div>
   );
 };
