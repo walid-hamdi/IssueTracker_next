@@ -1,6 +1,5 @@
 "use client";
 import { Button, Callout, TextField } from "@radix-ui/themes";
-import SimpleMDE from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
 import { Controller, useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
@@ -11,6 +10,11 @@ import { createIssusSchema } from "@/app/validationSchema";
 import z from "zod";
 import ErrorMessage from "@/app/components/ErrorMessage";
 import Spinner from "@/app/components/Spinner";
+import dynamic from "next/dynamic";
+
+const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
+  ssr: false,
+});
 
 type IssueForm = z.infer<typeof createIssusSchema>;
 
@@ -47,7 +51,7 @@ const NewIssue = () => {
         </Callout.Root>
       )}
       <form onSubmit={handleOnSubmit}>
-        <TextField.Root>
+        <TextField.Root mb="5">
           <TextField.Input placeholder="Title" {...register("title")} />
         </TextField.Root>
         <ErrorMessage>{errors.title?.message}</ErrorMessage>
