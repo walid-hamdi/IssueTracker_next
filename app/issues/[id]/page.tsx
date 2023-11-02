@@ -1,4 +1,6 @@
+import IssueStatusBadge from "@/app/components/IssueStatusBadge";
 import prisma from "@/prisma/client";
+import { Card, Flex, Heading, Text } from "@radix-ui/themes";
 import { notFound } from "next/navigation";
 import React from "react";
 
@@ -9,20 +11,38 @@ interface Props {
 }
 
 const IssueDetails = async ({ params }: Props) => {
-  if (typeof params.id !== "number") notFound();
+  const id = parseInt(params.id);
+
+  if (isNaN(id)) {
+    notFound();
+  }
 
   const issue = await prisma.issue.findUnique({
     where: {
-      id: parseInt(params.id),
+      id: id,
     },
   });
 
-  if (!issue) notFound();
+  if (!issue) {
+    notFound();
+  }
 
   return (
-    <div>
-      {issue.title}- {issue.status} - {issue.description}
-    </div>
+    <Card className="w-1/3 p-4 ">
+      <Heading size="5" weight="bold">
+        {issue.title}
+      </Heading>
+
+      <Text>{issue.description}</Text>
+      <IssueStatusBadge status={issue.status} />
+
+      <Flex justify="between" align="center">
+        <Text size="1" className="mb-2">
+          Created on: {new Date(issue.createdAt).toDateString()}
+        </Text>
+        <button className="text-blue-500 hover:underline">Edit</button>
+      </Flex>
+    </Card>
   );
 };
 

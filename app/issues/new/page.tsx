@@ -51,7 +51,7 @@ const NewIssue = () => {
         </Callout.Root>
       )}
       <form onSubmit={handleOnSubmit}>
-        <TextField.Root mb="5">
+        <TextField.Root mb="3">
           <TextField.Input placeholder="Title" {...register("title")} />
         </TextField.Root>
         <ErrorMessage>{errors.title?.message}</ErrorMessage>
