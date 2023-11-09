@@ -5,7 +5,7 @@ import { AiOutlineEdit } from "react-icons/ai";
 const EditIssueButton = ({ issueId }: { issueId: number }) => {
   return (
     <Link
-      href={`/issues/${issueId}/edit`}
+      href={`/issues/edit/${issueId}`}
       className="bg-indigo-400 rounded-md text-white py-1 px-3 flex items-center justify-center"
     >
       <AiOutlineEdit />
