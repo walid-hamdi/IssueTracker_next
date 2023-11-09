@@ -11,32 +11,34 @@ const Issues = async () => {
   return (
     <>
       <IssueAction />
-      <Table.Root variant="surface">
-        <Table.Header>
-          <Table.Cell>Issue</Table.Cell>
-          <Table.Cell className="hidden md:table-cell">Status</Table.Cell>
-          <Table.Cell className="hidden md:table-cell">Created</Table.Cell>
-        </Table.Header>
+      {issues.length > 0 && (
+        <Table.Root variant="surface">
+          <Table.Header>
+            <Table.Cell>Issue</Table.Cell>
+            <Table.Cell className="hidden md:table-cell">Status</Table.Cell>
+            <Table.Cell className="hidden md:table-cell">Created</Table.Cell>
+          </Table.Header>
 
-        <Table.Body>
-          {issues.map((issue: Issue) => (
-            <Table.Row key={issue.id}>
-              <Table.Cell>
-                <Link href={`issues/${issue.id}`}>{issue.title}</Link>
-                <div className="block md:hidden">
+          <Table.Body>
+            {issues.map((issue: Issue) => (
+              <Table.Row key={issue.id}>
+                <Table.Cell>
+                  <Link href={`issues/${issue.id}`}>{issue.title}</Link>
+                  <div className="block md:hidden">
+                    <IssueStatusBadge status={issue.status} />
+                  </div>
+                </Table.Cell>
+                <Table.Cell className="hidden md:table-cell">
                   <IssueStatusBadge status={issue.status} />
-                </div>
-              </Table.Cell>
-              <Table.Cell className="hidden md:table-cell">
-                <IssueStatusBadge status={issue.status} />
-              </Table.Cell>
-              <Table.Cell className="hidden md:table-cell">
-                {issue.createdAt.toDateString()}
-              </Table.Cell>
-            </Table.Row>
-          ))}
-        </Table.Body>
-      </Table.Root>
+                </Table.Cell>
+                <Table.Cell className="hidden md:table-cell">
+                  {issue.createdAt.toDateString()}
+                </Table.Cell>
+              </Table.Row>
+            ))}
+          </Table.Body>
+        </Table.Root>
+      )}
     </>
   );
 };
