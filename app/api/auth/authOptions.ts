@@ -1,12 +1,10 @@
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { PrismaClient } from "@prisma/client";
-import { AuthOptions } from "next-auth";
+import { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 
 const prisma = new PrismaClient();
 
-const authOptions: AuthOptions = {
-  adapter: PrismaAdapter(prisma),
+const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -15,6 +13,14 @@ const authOptions: AuthOptions = {
   ],
   session: {
     strategy: "jwt",
+  },
+  callbacks: {
+    async signIn({ account, profile }) {
+      if (!profile?.email) {
+        throw new Error("No Profile");
+      }
+      return true;
+    },
   },
 };
 
