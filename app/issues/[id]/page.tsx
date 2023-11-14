@@ -4,6 +4,8 @@ import { notFound } from "next/navigation";
 import DeleteIssueButton from "./DeleteIssueButton";
 import EditIssueButton from "./EditIssueButton";
 import IssueDetails from "./IssueDetails";
+import { getServerSession } from "next-auth";
+import authOptions from "@/app/api/auth/authOptions";
 
 interface Props {
   params: {
@@ -13,6 +15,7 @@ interface Props {
 
 const IssueDetailsPage = async ({ params }: Props) => {
   const id = parseInt(params.id);
+  const session = getServerSession(authOptions);
 
   if (isNaN(id)) {
     notFound();
@@ -33,10 +36,12 @@ const IssueDetailsPage = async ({ params }: Props) => {
       <Box>
         <IssueDetails issue={issue} />
       </Box>
-      <Box className="flex h-fit gap-1 flex-col ">
-        <EditIssueButton issueId={issue.id} />
-        <DeleteIssueButton issueId={issue.id} />
-      </Box>
+      {!session && (
+        <Box className="flex h-fit gap-1 flex-col ">
+          <EditIssueButton issueId={issue.id} />
+          <DeleteIssueButton issueId={issue.id} />
+        </Box>
+      )}
     </div>
   );
 };

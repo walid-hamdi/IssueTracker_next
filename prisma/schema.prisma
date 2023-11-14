@@ -24,15 +24,6 @@ model account {
   @@index([userId], map: "Account_userId_fkey")
 }
 
-model issue {
-  id          Int          @id @default(autoincrement())
-  title       String       @db.VarChar(255)
-  description String       @db.Text
-  status      issue_status @default(OPEN)
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime
-}
-
 model session {
   id           String   @id
   userId       String
@@ -69,7 +60,16 @@ model verificationrequest {
   @@unique([identifier, token], map: "VerificationRequest_identifier_token_key")
 }
 
-enum issue_status {
+model issue {
+  id          Int      @id @default(autoincrement())
+  title       String   @db.VarChar(255)
+  description String   @db.Text
+  status      Status   @default(OPEN)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+enum Status {
   OPEN
   IN_PROGRESS
   CLOSED
