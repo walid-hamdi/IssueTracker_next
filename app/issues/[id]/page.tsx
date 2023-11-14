@@ -6,6 +6,7 @@ import EditIssueButton from "./EditIssueButton";
 import IssueDetails from "./IssueDetails";
 import { getServerSession } from "next-auth";
 import authOptions from "@/app/api/auth/authOptions";
+import AssigneeSelect from "./AssigneeSelect";
 
 interface Props {
   params: {
@@ -15,11 +16,9 @@ interface Props {
 
 const IssueDetailsPage = async ({ params }: Props) => {
   const id = parseInt(params.id);
-  const session = getServerSession(authOptions);
+  const session = await getServerSession(authOptions);
 
-  if (isNaN(id)) {
-    notFound();
-  }
+  if (isNaN(id)) notFound();
 
   const issue = await prisma.issue.findUnique({
     where: {
@@ -36,8 +35,9 @@ const IssueDetailsPage = async ({ params }: Props) => {
       <Box>
         <IssueDetails issue={issue} />
       </Box>
-      {!session && (
-        <Box className="flex h-fit gap-1 flex-col ">
+      {session?.user && (
+        <Box className="flex h-fit gap-2 flex-col ">
+          <AssigneeSelect />
           <EditIssueButton issueId={issue.id} />
           <DeleteIssueButton issueId={issue.id} />
         </Box>
