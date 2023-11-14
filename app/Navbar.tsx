@@ -1,6 +1,5 @@
 "use client";
 
-import { CaretDownIcon } from "@radix-ui/react-icons";
 import {
   Avatar,
   Box,
@@ -14,6 +13,7 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AiOutlineBug } from "react-icons/ai";
+import Skeleton from "./components/Skeleton";
 
 const Navbar = () => {
   return (
@@ -64,7 +64,7 @@ const NavLinks = () => {
 const AuthStatus = () => {
   const { status, data } = useSession();
 
-  if (status === "loading") return null;
+  if (status === "loading") return <Skeleton width="3rem" />;
 
   if (status === "unauthenticated")
     return (
