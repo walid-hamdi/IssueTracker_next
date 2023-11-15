@@ -7,57 +7,50 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model account {
-  id                 String    @id
-  userId             String
-  providerType       String
-  providerId         String
-  providerAccountId  String
-  refreshToken       String?
-  accessToken        String?
-  accessTokenExpires DateTime?
-  createdAt          DateTime  @default(now())
-  updatedAt          DateTime
-  user               user      @relation(fields: [userId], references: [id], map: "Account_userId_fkey")
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
 
-  @@unique([providerId, providerAccountId], map: "Account_providerId_providerAccountId_key")
-  @@index([userId], map: "Account_userId_fkey")
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
 }
 
-model session {
-  id           String   @id
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
   userId       String
   expires      DateTime
-  sessionToken String   @unique(map: "Session_sessionToken_key")
-  accessToken  String   @unique(map: "Session_accessToken_key")
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime
-  user         user     @relation(fields: [userId], references: [id], map: "Session_userId_fkey")
-
-  @@index([userId], map: "Session_userId_fkey")
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-model user {
-  id            String    @id
-  name          String?
-  email         String?   @unique(map: "User_email_key")
-  emailVerified DateTime?
-  image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime
-  account       account[]
-  session       session[]
+model User {
+  id             String    @id @default(cuid())
+  name           String?
+  email          String?   @unique
+  hashedPassword String?
+  emailVerified  DateTime?
+  image          String?
+  accounts       Account[]
+  sessions       Session[]
 }
 
-model verificationrequest {
-  id         String   @id
+model VerificationToken {
   identifier String
-  token      String   @unique(map: "VerificationRequest_token_key")
+  token      String   @unique
   expires    DateTime
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime
 
-  @@unique([identifier, token], map: "VerificationRequest_identifier_token_key")
+  @@unique([identifier, token])
 }
 
 model issue {
