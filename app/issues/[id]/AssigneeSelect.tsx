@@ -6,20 +6,19 @@ import { Select } from "@radix-ui/themes";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { User } from "next-auth";
-import toast, { ToastBar, ToastIcon, Toaster } from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 
 const AssigneeSelect = ({ issue }: { issue: issue }) => {
-  const {
-    data: users,
-    error,
-    isLoading,
-  } = useQuery<User[]>({
-    queryKey: ["users"],
-    queryFn: async () =>
-      await axios.get<User[]>("/api/users").then((res) => res.data),
-    staleTime: 1000 * 60,
-    retry: 3,
-  });
+  const { data: users, error, isLoading } = useUsers();
+
+  const onChangeValue = (userId: string) =>
+    axios
+      .patch(`/api/issues/${issue?.id}`, {
+        assignedToUserId: userId !== "unassigned" ? userId : null,
+      })
+      .catch(() => {
+        toast("Changed couldn't be saved.");
+      });
 
   if (error) return null;
 
@@ -31,15 +30,7 @@ const AssigneeSelect = ({ issue }: { issue: issue }) => {
         defaultValue={
           issue.assignedToUserId ? issue.assignedToUserId : "unassigned"
         }
-        onValueChange={(userId) => {
-          axios
-            .patch(`/api/issues/${issue?.id}`, {
-              assignedToUserId: userId !== "unassigned" ? userId : null,
-            })
-            .catch(() => {
-              toast("Changed couldn't be saved.");
-            });
-        }}
+        onValueChange={onChangeValue}
       >
         <Select.Trigger placeholder="Assign..." />
         <Select.Content>
@@ -59,6 +50,16 @@ const AssigneeSelect = ({ issue }: { issue: issue }) => {
       <Toaster />
     </>
   );
+};
+
+const useUsers = () => {
+  return useQuery<User[]>({
+    queryKey: ["users"],
+    queryFn: async () =>
+      await axios.get<User[]>("/api/users").then((res) => res.data),
+    staleTime: 1000 * 60,
+    retry: 3,
+  });
 };
 
 export default AssigneeSelect;
