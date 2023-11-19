@@ -1,14 +1,14 @@
 "use client";
 
 import Skeleton from "@/app/components/Skeleton";
-import { issue } from "@prisma/client";
+import { Issue } from "@prisma/client";
 import { Select } from "@radix-ui/themes";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { User } from "next-auth";
 import toast, { Toaster } from "react-hot-toast";
 
-const AssigneeSelect = ({ issue }: { issue: issue }) => {
+const AssigneeSelect = ({ issue }: { issue: Issue }) => {
   const { data: users, error, isLoading } = useUsers();
 
   const onChangeValue = (userId: string) =>
