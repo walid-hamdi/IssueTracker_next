@@ -3,16 +3,16 @@ import { Table } from "@radix-ui/themes";
 import IssueStatusBadge from "../../components/IssueStatusBadge";
 import IssueAction from "./IssueAction";
 import Link from "../../components/Link";
-import { Status, issue } from "@prisma/client";
+import { Status, Issue } from "@prisma/client";
 import NavLink from "next/link";
 import { ArrowUpIcon } from "@radix-ui/react-icons";
 
 const Issues = async ({
   searchParams,
 }: {
-  searchParams: { status: Status; orderBy: keyof issue };
+  searchParams: { status: Status; orderBy: keyof Issue };
 }) => {
-  const columns: { label: string; value: keyof issue; className?: string }[] = [
+  const columns: { label: string; value: keyof Issue; className?: string }[] = [
     {
       label: "Issue",
       value: "title",
@@ -77,7 +77,7 @@ const Issues = async ({
           </Table.Header>
 
           <Table.Body>
-            {issues.map((issue: issue) => (
+            {issues.map((issue: Issue) => (
               <Table.Row key={issue.id}>
                 <Table.Cell>
                   <Link href={`/issues/${issue.id}`}>{issue.title}</Link>

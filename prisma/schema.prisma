@@ -43,7 +43,7 @@ model User {
   image          String?
   accounts       Account[]
   sessions       Session[]
-  assignedIusses issue[]
+  assignedIusses Issue[]
 }
 
 model VerificationToken {
@@ -54,7 +54,7 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-model issue {
+model Issue {
   id               Int      @id @default(autoincrement())
   title            String   @db.VarChar(255)
   description      String   @db.Text
