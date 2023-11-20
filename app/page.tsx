@@ -1,16 +1,17 @@
 import prisma from "@/prisma/client";
+import { Flex, Grid } from "@radix-ui/themes";
+import { Metadata } from "next";
+import IssueChart from "./IssueChart";
 import IssueSummary from "./IssueSummary";
 import LatestIssues from "./LatestIssues";
-import IssueChart from "./IssueChart";
-import { Flex, Grid } from "@radix-ui/themes";
-import { Status } from "@prisma/client";
 
-export default async function Home() {
+const page = async () => {
   const closed = await prisma.issue.count({
     where: {
       status: "CLOSED",
     },
   });
+
   const inProgress = await prisma.issue.count({
     where: {
       status: "IN_PROGRESS",
@@ -39,4 +40,13 @@ export default async function Home() {
       </Grid>
     </main>
   );
-}
+};
+
+export const metadata: Metadata = {
+  title: "Issue Tracker - Dashboard",
+  description: "View issue dashboard",
+  keywords:
+    "issues, bug tracking, task management, project management, issue dashboard, software development, bug report, issue tracking system, project tracking",
+};
+
+export default page;

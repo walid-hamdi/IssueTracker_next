@@ -1,5 +1,4 @@
-import { Heading, Flex, Box, Text } from "@radix-ui/themes";
-import React from "react";
+import { Box, Flex, Heading, Text } from "@radix-ui/themes";
 import Skeleton from "react-loading-skeleton";
 
 const LoadingDetails = () => {
