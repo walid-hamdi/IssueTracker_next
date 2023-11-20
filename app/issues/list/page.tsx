@@ -1,9 +1,10 @@
 import Pagination from "@/app/components/Pagination";
 import prisma from "@/prisma/client";
 import { Status } from "@prisma/client";
+import { Flex } from "@radix-ui/themes";
 import IssueAction from "./IssueAction";
 import IssueTable, { IssueQuery, columnsName } from "./IssueTable";
-import { Flex } from "@radix-ui/themes";
+import { Metadata } from "next";
 
 interface Props {
   searchParams: IssueQuery;
@@ -44,6 +45,13 @@ const Issues = async ({ searchParams }: Props) => {
       />
     </Flex>
   );
+};
+
+export const metadata: Metadata = {
+  title: "Issue Tracker - List",
+  description: "View all issues",
+  keywords:
+    "issues, bug tracking, task management, project management, issue list, bug list, issue tracking system, project tracking",
 };
 
 export default Issues;
