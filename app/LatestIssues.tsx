@@ -23,8 +23,8 @@ const LatestIssues = async () => {
         <Table.Body>
           {issues.map((issue) => {
             return (
-              <Table.Row>
-                <Table.Cell key={issue.id}>
+              <Table.Row key={issue.id}>
+                <Table.Cell>
                   <Flex justify="between">
                     <Flex direction="column" align="start" gap="2">
                       <Link href={`/issues/${issue.id}`}> {issue.title}</Link>
